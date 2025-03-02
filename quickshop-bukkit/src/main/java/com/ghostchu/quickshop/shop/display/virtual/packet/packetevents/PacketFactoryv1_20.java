@@ -39,6 +39,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnEntity;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUnloadChunk;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import lombok.Getter;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Location;
@@ -78,7 +79,14 @@ public class PacketFactoryv1_20 implements PacketFactory<PacketWrapper<?>> {
   @Override
   public PacketWrapper<?> createSpawnPacket(final int id, @NotNull final Location displayLocation) {
 
-    final EntityType type = EntityType.ITEM;
+    final String typeName;
+    if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_20_5)) {
+      typeName = "ITEM";
+    } else {
+      typeName = "DROPPED_ITEM";
+    }
+    
+    final EntityType type = EntityType.valueOf(typeName);
     final UUID identifier = UUID.nameUUIDFromBytes(("SHOP:" + id).getBytes(StandardCharsets.UTF_8));
 
     return new WrapperPlayServerSpawnEntity(id, identifier, SpigotConversionUtil.fromBukkitEntityType(type),
