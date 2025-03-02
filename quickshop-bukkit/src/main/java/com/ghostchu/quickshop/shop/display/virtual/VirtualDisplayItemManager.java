@@ -67,7 +67,7 @@ public class VirtualDisplayItemManager {
 
     //We handle our default packet handlers
     addHandler(new PacketEventsHandler());
-    addHandler(new ProtocolLibHandler());
+    //addHandler(new ProtocolLibHandler());
 
     setHandler();
 
